@@ -5,7 +5,7 @@ int main() {
     std::string command;
 
     while (true) {
-        std::cout << "Komut giriniz (ADD, SEARCH, EXIT): ";
+        std::cout << "Enter command (ADD, SEARCH, EXIT): ";
         if (!std::getline(std::cin, command))
             break;
         if (command == "ADD") {

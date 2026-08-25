@@ -1,4 +1,5 @@
 #include "PhoneBook.hpp"
+#include <cctype>
 
 PhoneBook::PhoneBook() {
     this->count = 0;
@@ -11,15 +12,25 @@ std::string PhoneBook::formatColumn(std::string str) const {
     return str;
 }
 
+static bool isOnlyWhitespace(const std::string& str) {
+    size_t i = 0;
+    while (i < str.length()) {
+        if (!std::isspace(static_cast<unsigned char>(str[i])))
+            return false;
+        i++;
+    }
+    return true;
+}
+
 static std::string getInput(std::string prompt) {
     std::string input = "";
     while (true) {
         std::cout << prompt;
         if (!std::getline(std::cin, input))
             return "";
-        if (!input.empty())
+        if (!input.empty() && !isOnlyWhitespace(input))
             break;
-        std::cout << "Alan bos birakilamaz! Lutfen tekrar giriniz.\n";
+        std::cout << "Field cannot be empty! Please try again.\n";
     }
     return input;
 }
@@ -44,7 +55,7 @@ void PhoneBook::addContact() {
     this->oldestIndex = (this->oldestIndex + 1) % 8;
     if (this->count < 8)
         this->count++;
-    std::cout << "Kisi basariyla eklendi!\n";
+    std::cout << "Contact added successfully!\n";
 }
 
 void PhoneBook::displayContact(int index) const {
@@ -57,7 +68,7 @@ void PhoneBook::displayContact(int index) const {
 
 void PhoneBook::searchContacts() const {
     if (this->count == 0) {
-        std::cout << "Rehber bos! Once ADD komutu ile kisi ekleyiniz.\n";
+        std::cout << "Phonebook is empty! Use ADD command first.\n";
         return;
     }
 
@@ -79,7 +90,7 @@ void PhoneBook::searchContacts() const {
     std::cout << "---------------------------------------------\n";
 
     std::string input;
-    std::cout << "Detaylarini gormek istediginiz kisinin indeksini giriniz (0 - " << (this->count - 1) << "): ";
+    std::cout << "Enter the index of the contact to display (0 - " << (this->count - 1) << "): ";
     if (!std::getline(std::cin, input))
         return;
 
@@ -87,6 +98,6 @@ void PhoneBook::searchContacts() const {
         int index = input[0] - '0';
         displayContact(index);
     } else {
-        std::cout << "Gecersiz indeks!\n";
+        std::cout << "Invalid index!\n";
     }
 }
